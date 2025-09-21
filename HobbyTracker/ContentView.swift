@@ -23,6 +23,7 @@ var HobbyList: [String:String] = [
 ]
 struct ContentView: View {
    
+   
     @Environment(\.managedObjectContext) private var viewContext
     @State private var showAddItemView = false
     
@@ -60,21 +61,85 @@ struct ContentView: View {
                 }
                 
                 
-                
-                
             }
         }.sheet(isPresented: $showAddItemView, content: {FormView() })
     }
 }
 
 struct FormView: View{
+    @State  var emoji: String = "📖";
+    @State var hobbyName:String = "" ;
+    @State var hobbyAdded = false ;
     var body: some View {
-        Text("Hello, World!")
+        
+        VStack{
+            Form{
+                TextField(
+                    "Hobby",
+                    text: $hobbyName
+                )
+                
+                Picker(selection: $emoji, label: Text("Pick a Emoji"),
+                       content: {
+                    Text("📖").tag("📖")
+                    Text("🎶").tag("🎶")
+                    Text("🏃‍♂️").tag("🏃‍♂️")
+                    Text("💰").tag("💰")
+                    Text("🎨").tag("🎨")
+                    Text("🍳").tag("🍳")
+                    Text("✍️").tag("✍️")
+                    Text("🏊‍♀️").tag("🏊‍♀️")
+                    Text("💃").tag("💃")
+                    Text("🎤").tag("🎤")
+                    Text("✈️").tag("✈️")
+                    Text("🌱").tag("🌱")
+                    Text("🎮").tag("🎮")
+                    Text("📷").tag("📷")
+                    Text("📚").tag("📚")
+                    Text("🚴‍♂️").tag("🚴‍♂️")
+                    Text("🧘‍♂️").tag("🧘‍♂️")
+                    Text("🎲").tag("🎲")
+                    Text("🎬").tag("🎬")
+                    Text("🎹").tag("🎹")
+                    
+                })
+//                Text("Selected tag: \(emoji)")
+//                Text("Selected tag: \(hobbyName)")
+                
+                Button(action: {
+                    
+                    if(hobbyName.count > 3 && hobbyName.count < 15){
+                        if(!HobbyList.keys.contains(hobbyName)){
+                            HobbyList[hobbyName] = emoji;
+                            print("addeddfas")
+                            print(HobbyList)
+                            hobbyName = ""
+                            hobbyAdded = true
+                        }
+                        
+                    }
+                }){
+                    Label("Submit", systemImage: "")
+                    Divider()
+                    if(hobbyAdded){
+                        Text("Hobby Added")
+                    }
+                    else{
+                        Text("Hobby Already Exist")
+                    }
+                }
+            }
+            
+        }
+        
     }
-    
 }
 
-
+struct Success: View{
+    var body: some View {
+        Text("Hobby was added")
+    }
+}
 
 #Preview {
     ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
